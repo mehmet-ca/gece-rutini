@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<title>Gece Rutini</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#12141c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141c;
+    --surface:#1b1f2c;
+    --surface-2:#232838;
+    --text:#eae7e1;
+    --muted:#8890a0;
+    --ember:#ff8a4c;
+    --ember-dim:#4a3524;
+    --mint:#6fd9a6;
+    --mint-dim:#204336;
+    --line:#2b3040;
+    --danger:#ff6b6b;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;height:100%;overflow:hidden;overscroll-behavior:none;}
+  body{
+    background:
+      radial-gradient(600px 300px at 15% -10%, #2a2140 0%, transparent 60%),
+      radial-gradient(500px 260px at 110% 10%, #1a2a3a 0%, transparent 55%),
+      var(--bg);
+    height:100dvh;
+  }
+  .app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  .num{font-family:'JetBrains Mono',monospace;}
+  header.top{padding:calc(16px + var(--safe-top)) 20px 10px;flex:none;}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  .greeting{font-size:26px;font-weight:700;margin-top:6px;}
+  .greeting span{color:var(--ember);}
+  main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 16px calc(24px + var(--safe-bottom) + 78px);}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;}
+  .card h3{font-size:15px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+  .row{display:flex;gap:10px;}
+  .row>*{flex:1;}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;}
+  input,select{
+    width:100%;background:var(--surface-2);border:1px solid var(--line);color:var(--text);
+    border-radius:12px;padding:11px 12px;font-size:15px;font-family:'Inter',sans-serif;margin-bottom:12px;
+    -webkit-appearance:none;appearance:none;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--ember);}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238890a0' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
+  button{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:12px;
+    padding:12px 16px;cursor:pointer;transition:transform .12s ease, opacity .12s ease;
+  }
+  button:active{transform:scale(0.96);}
+  button:disabled{opacity:.5;transform:none;}
+  .btn-primary{background:var(--ember);color:#1a1206;width:100%;}
+  .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--line);}
+  .btn-mint{background:var(--mint);color:#0c2419;}
+  .btn-ai{background:linear-gradient(135deg,#8a6bff,#ff8a4c);color:#12141c;}
+
+  /* Ring */
+  .ring-wrap{display:flex;align-items:center;gap:18px;}
+  .ring-numbers{flex:1;}
+  .ring-numbers .big{font-size:30px;font-weight:700;}
+  .ring-numbers .lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+  svg.ring{transform:rotate(-90deg);flex:none;}
+  .ring-track{fill:none;stroke:var(--surface-2);stroke-width:11;}
+  .ring-fill{fill:none;stroke:var(--ember);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset .5s ease, stroke .4s ease;}
+
+  .food-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .food-item:last-child{border-bottom:none;}
+  .food-thumb{width:38px;height:38px;border-radius:10px;object-fit:cover;flex:none;background:var(--surface-2);}
+  .food-item .name{font-size:14px;flex:1;}
+  .food-item .kcal{font-family:'JetBrains Mono',monospace;color:var(--ember);font-size:13px;flex:none;}
+  .food-item .del{color:var(--muted);background:none;border:none;font-size:16px;padding:2px 6px;}
+  .empty{color:var(--muted);font-size:13px;padding:6px 0;}
+
+  .photo-zone{border:1.5px dashed var(--line);border-radius:14px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+  .photo-preview{width:56px;height:56px;border-radius:10px;object-fit:cover;flex:none;display:none;}
+  .photo-actions{flex:1;display:flex;flex-direction:column;gap:8px;}
+  .photo-actions .row{gap:8px;}
+  .file-btn{position:relative;overflow:hidden;text-align:center;}
+  .file-btn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+  .ai-hint{font-size:11px;color:var(--muted);line-height:1.4;}
+
+  /* Exercise */
+  .day-pill-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:4px;}
+  .day-pill{flex:none;padding:7px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:12px;font-weight:600;border:1px solid var(--line);position:relative;}
+  .day-pill.active{background:var(--ember-dim);color:var(--ember);border-color:var(--ember);}
+  .day-pill.completed::after{content:'✓';position:absolute;top:-6px;right:-4px;background:var(--mint);color:#0c2419;font-size:9px;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .program-title{font-size:19px;font-weight:700;margin:14px 0 4px;}
+  .program-sub{font-size:13px;color:var(--muted);margin-bottom:14px;}
+  .ex-item{background:var(--surface-2);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+  .ex-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;}
+  .ex-check.done{background:var(--mint);border-color:var(--mint);color:#0c2419;}
+  .ex-info{flex:1;}
+  .ex-name{font-size:14.5px;font-weight:600;}
+  .ex-name.done{text-decoration:line-through;color:var(--muted);}
+  .ex-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+  .ex-timer{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ember);background:var(--ember-dim);padding:4px 8px;border-radius:8px;flex:none;}
+
+  /* Steps & Goals */
+  .mood-row{display:flex;gap:8px;margin-bottom:12px;}
+  .mood-btn{flex:1;background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;font-size:22px;padding:8px 0;}
+  .mood-btn.active{border-color:var(--ember);background:var(--ember-dim);}
+  textarea{
+    width:100%;background:var(--surface-2);border:1px solid var(--line);color:var(--text);
+    border-radius:12px;padding:12px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;resize:vertical;
+  }
+  textarea:focus{outline:none;border-color:var(--ember);}
+  .journal-entry{background:var(--surface-2);border-radius:14px;padding:12px 14px;margin-bottom:10px;}
+  .journal-entry .je-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .journal-entry .je-date{font-size:12px;color:var(--muted);font-weight:600;}
+  .journal-entry .je-mood{font-size:18px;}
+  .journal-entry .je-text{font-size:13.5px;line-height:1.5;white-space:pre-wrap;}
+  .journal-entry .je-actions{display:flex;gap:10px;margin-top:8px;}
+  .journal-entry .je-actions button{background:none;border:none;color:var(--muted);font-size:12px;padding:0;font-family:'Inter',sans-serif;font-weight:600;}
+  .journal-entry .je-actions button.del{color:var(--danger);}
+  .goal-week-row{display:flex;gap:6px;margin:12px 0;}
+  .goal-week-row .d{flex:1;text-align:center;font-size:11px;color:var(--muted);}
+  .goal-week-row .d .box{width:100%;aspect-ratio:1;border-radius:9px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .goal-week-row .d .box.done{background:var(--mint);border-color:var(--mint);color:#0c2419;}
+  .goal-week-row .d .box.today{border-color:var(--ember);}
+  .progress-bar{height:10px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:8px;}
+  .progress-bar .fill{height:100%;background:var(--ember);border-radius:999px;transition:width .4s ease;}
+  .kv{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:8px;}
+  .kv b{color:var(--text);font-family:'JetBrains Mono',monospace;}
+  .note{font-size:12px;color:var(--muted);line-height:1.5;background:var(--surface-2);border-radius:12px;padding:12px;margin-top:6px;}
+  .note b{color:var(--ember);}
+
+  /* Nav */
+  nav.tabbar{
+    position:fixed;bottom:0;left:0;right:0;
+    background:rgba(27,31,44,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);display:flex;justify-content:space-around;
+    padding:10px 6px calc(10px + var(--safe-bottom));max-width:480px;margin:0 auto;
+  }
+  .tab{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10.5px;font-family:'Inter',sans-serif;font-weight:600;flex:1;padding:4px;}
+  .tab .ic{font-size:20px;line-height:1;}
+  .tab.active{color:var(--ember);}
+  .view{display:none;animation:fade .25s ease;}
+  .view.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+  .toast{
+    position:fixed;top:calc(14px + var(--safe-top));left:50%;transform:translateX(-50%);
+    background:var(--surface);border:1px solid var(--ember);color:var(--text);padding:12px 18px;border-radius:14px;
+    font-size:13px;z-index:999;opacity:0;pointer-events:none;transition:opacity .25s ease, top .25s ease;max-width:88%;text-align:center;
+  }
+  .toast.show{opacity:1;top:calc(22px + var(--safe-top));}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="eyebrow" id="dateLabel">—</div>
+    <div class="greeting" id="greeting">Hoş geldin <span>👋</span></div>
+  </header>
+
+  <main>
+
+    <!-- KALORİ -->
+    <section class="view active" id="view-kalori">
+      <div class="card" id="profileCard">
+        <h3>Profilin</h3>
+        <div class="row">
+          <div>
+            <label>Yaş</label>
+            <input type="number" id="p_age" placeholder="28">
+          </div>
+          <div>
+            <label>Cinsiyet</label>
+            <select id="p_gender">
+              <option value="male">Erkek</option>
+              <option value="female">Kadın</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Boy (cm)</label>
+            <input type="number" id="p_height" placeholder="175">
+          </div>
+          <div>
+            <label>Kilo (kg)</label>
+            <input type="number" id="p_weight" placeholder="78">
+          </div>
+        </div>
+        <label>Aktivite düzeyi</label>
+        <select id="p_activity">
+          <option value="1.2">Hareketsiz (masa başı iş)</option>
+          <option value="1.375">Hafif aktif (haftada 1-3 gün)</option>
+          <option value="1.55" selected>Orta aktif (haftada 3-5 gün)</option>
+          <option value="1.725">Çok aktif (haftada 6-7 gün)</option>
+          <option value="1.9">Sporcu (günde 2 antrenman)</option>
+        </select>
+        <label>Hedef</label>
+        <select id="p_goal">
+          <option value="-500">Yağ yakımı (-500 kcal)</option>
+          <option value="-250">Hafif kilo verme (-250 kcal)</option>
+          <option value="0" selected>Kiloyu koru</option>
+          <option value="250">Kas kütlesi artışı (+250 kcal)</option>
+        </select>
+        <button class="btn-primary" id="calcBtn">Günlük Hedefimi Hesapla</button>
+      </div>
+
+      <div class="card" id="ringCard" style="display:none;">
+        <h3>Bugünkü Denge</h3>
+        <div class="ring-wrap">
+          <svg class="ring" width="108" height="108" viewBox="0 0 108 108">
+            <circle class="ring-track" cx="54" cy="54" r="46"></circle>
+            <circle class="ring-fill" id="ringFill" cx="54" cy="54" r="46" stroke-dasharray="289" stroke-dashoffset="289"></circle>
+          </svg>
+          <div class="ring-numbers">
+            <div class="big num" id="ringEaten">0</div>
+            <div class="lbl">/ <span id="ringGoal">0</span> kcal alındı</div>
+            <div class="lbl" style="margin-top:8px;" id="ringRemaining">Hedef için hesapla ↑</div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <div class="card">
+        <h3>Bugün Ne Yedin</h3>
+
+        <div class="photo-zone">
+          <img class="photo-preview" id="photoPreview" alt="">
+          <div class="photo-actions">
+            <div class="row">
+              <button class="btn-ghost file-btn">📷 Fotoğraf Çek
+                <input type="file" accept="image/*" capture="environment" id="photoInputCamera">
+              </button>
+              <button class="btn-ghost file-btn">🖼️ Galeriden Seç
+                <input type="file" accept="image/*" id="photoInputGallery">
+              </button>
+            </div>
+            <button class="btn-ai" id="aiEstimateBtn" style="display:none;" disabled>🤖 AI ile Tahmin Et</button>
+            <div class="ai-hint" id="aiHint" style="display:none;">Fotoğraf sunucuya gönderilip yemek ve kalori tahmini otomatik yapılır.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <input type="text" id="foodName" placeholder="örn. Izgara tavuk">
+          <input type="number" id="foodKcal" placeholder="kcal" style="max-width:90px;">
+        </div>
+        <button class="btn-ghost" style="width:100%;margin-bottom:12px;" id="addFoodBtn">+ Ekle</button>
+        <div id="foodList"><div class="empty">Henüz bir şey eklemedin.</div></div>
+      </div>
+    </section>
+
+    <!-- EGZERSİZ -->
+    <section class="view" id="view-egzersiz">
+      <div class="card">
+        <h3>Haftalık Döngü</h3>
+        <div class="day-pill-row" id="dayPills"></div>
+        <div class="program-title" id="progTitle">—</div>
+        <div class="program-sub" id="progSub">—</div>
+        <div id="exList"></div>
+        <div class="row" style="margin-top:6px;">
+          <button class="btn-ghost" id="shuffleBtn">🔀 Başka varyasyon öner</button>
+          <button class="btn-mint" id="resetChecksBtn">↺ Sıfırla</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GÜNLÜK & HEDEF -->
+    <section class="view" id="view-hedef">
+      <div class="card">
+        <h3>Günlük Kayıt</h3>
+        <div class="mood-row" id="moodRow">
+          <button class="mood-btn" data-mood="😄">😄</button>
+          <button class="mood-btn" data-mood="🙂">🙂</button>
+          <button class="mood-btn" data-mood="😐">😐</button>
+          <button class="mood-btn" data-mood="😔">😔</button>
+          <button class="mood-btn" data-mood="😣">😣</button>
+        </div>
+        <textarea id="journalText" rows="4" placeholder="Bugün nasıldı? Neler oldu, ne hissettin, neye dikkat etmek istersin..."></textarea>
+        <button class="btn-primary" id="saveJournalBtn">Kaydet</button>
+        <div class="note" id="journalStatus" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h3>Geçmiş Kayıtların</h3>
+        <div id="journalHistory"><div class="empty">Henüz kaydın yok.</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Haftalık Egzersiz Hedefi</h3>
+        <div class="goal-week-row" id="weekRow"></div>
+        <div class="kv"><span>Haftalık hedef (gün)</span><b><input type="number" id="weeklyGoalInput" style="width:60px;display:inline-block;margin:0;padding:4px 8px;font-size:13px;text-align:right;" value="4"></b></div>
+        <div class="progress-bar"><div class="fill" id="weekFill" style="width:0%;background:var(--mint);"></div></div>
+        <div class="kv"><span id="weekProgressText">0 / 4 gün tamamlandı</span><span></span></div>
+      </div>
+
+      <div class="card">
+        <h3>Kilo Hedefi</h3>
+        <div class="row">
+          <div>
+            <label>Şu anki kilo (kg)</label>
+            <input type="number" id="currentWeightInput" placeholder="78">
+          </div>
+          <div>
+            <label>Hedef kilo (kg)</label>
+            <input type="number" id="targetWeightInput" placeholder="72">
+          </div>
+        </div>
+        <button class="btn-ghost" style="width:100%;margin-bottom:10px;" id="saveWeightGoalBtn">Kaydet</button>
+        <div class="kv" id="weightGoalText"><span>Hedefe kalan</span><b>—</b></div>
+        <div class="progress-bar"><div class="fill" id="weightFill" style="width:0%;background:var(--mint);"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab active" data-view="kalori"><span class="ic">🔥</span>Kalori</button>
+    <button class="tab" data-view="egzersiz"><span class="ic">🌙</span>Egzersiz</button>
+    <button class="tab" data-view="hedef"><span class="ic">📔</span>Günlük &amp; Hedef</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- storage helpers (safe for real device use) ---------- */
+  function load(key, fallback){
+    try{
+      var v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function save(key, value){
+    try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){ /* ignore, e.g. storage full */ }
+  }
+
+  function todayKey(){
+    var d = new Date();
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+  function dateKeyFor(d){
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+
+  var state = {
+    profile: load('gr_profile', null),
+    goalKcal: load('gr_goalKcal', null),
+    foods: load('gr_foods_' + todayKey(), []),
+    checks: load('gr_checks_' + todayKey(), {}),
+    shuffleSeed: load('gr_shuffleSeed_' + todayKey(), null),
+    completedDays: load('gr_completedDays', {}),
+    weeklyGoal: load('gr_weeklyGoal', 4),
+    weightGoal: load('gr_weightGoal', null)
+  };
+
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2400);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  /* ---------- header greeting ---------- */
+  var days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  var months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  function renderHeader(){
+    var d = new Date();
+    document.getElementById('dateLabel').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+    var h = d.getHours();
+    var g = h < 6 ? 'İyi geceler' : h < 11 ? 'Günaydın' : h < 17 ? 'İyi günler' : h < 21 ? 'İyi akşamlar' : 'Eve hoş geldin';
+    document.getElementById('greeting').innerHTML = g + ' <span>' + (h>=17||h<6 ? '🌙' : '👋') + '</span>';
+  }
+  renderHeader();
+  setInterval(renderHeader, 60000);
+
+  /* ---------- tabs ---------- */
+  var tabs = document.querySelectorAll('.tab');
+  var views = document.querySelectorAll('.view');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      views.forEach(function(v){ v.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('view-' + tab.dataset.view).classList.add('active');
+    });
+  });
+
+  /* ================= KALORİ ================= */
+  var profileCard = document.getElementById('profileCard');
+  var ringCard = document.getElementById('ringCard');
+
+  function fillProfileForm(){
+    if(!state.profile) return;
+    document.getElementById('p_age').value = state.profile.age;
+    document.getElementById('p_gender').value = state.profile.gender;
+    document.getElementById('p_height').value = state.profile.height;
+    document.getElementById('p_weight').value = state.profile.weight;
+    document.getElementById('p_activity').value = state.profile.activity;
+    document.getElementById('p_goal').value = state.profile.goal;
+  }
+  fillProfileForm();
+
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    var age = parseFloat(document.getElementById('p_age').value);
+    var gender = document.getElementById('p_gender').value;
+    var height = parseFloat(document.getElementById('p_height').value);
+    var weight = parseFloat(document.getElementById('p_weight').value);
+    var activity = parseFloat(document.getElementById('p_activity').value);
+    var goalAdj = parseFloat(document.getElementById('p_goal').value);
+
+    if(!age || !height || !weight){
+      toast('Lütfen yaş, boy ve kiloyu doldur.');
+      return;
+    }
+    var bmr = gender === 'male'
+      ? (10*weight + 6.25*height - 5*age + 5)
+      : (10*weight + 6.25*height - 5*age - 161);
+    var tdee = bmr * activity;
+    var goalKcal = Math.round(tdee + goalAdj);
+
+    state.profile = {age:age, gender:gender, height:height, weight:weight, activity:activity, goal:goalAdj};
+    state.goalKcal = goalKcal;
+    save('gr_profile', state.profile);
+    save('gr_goalKcal', state.goalKcal);
+
+    // also prefill current weight in goal card
+    var cw = document.getElementById('currentWeightInput');
+    if(cw && !cw.value) cw.value = weight;
+
+    ringCard.style.display = 'block';
+    toast('Günlük hedefin: ' + goalKcal + ' kcal');
+    renderRing();
+  });
+
+  var foodListEl = document.getElementById('foodList');
+  function renderFoods(){
+    if(state.foods.length === 0){
+      foodListEl.innerHTML = '<div class="empty">Henüz bir şey eklemedin.</div>';
+      return;
+    }
+    foodListEl.innerHTML = state.foods.map(function(f, i){
+      var thumb = f.photo ? '<img class="food-thumb" src="'+f.photo+'">' : '<div class="food-thumb"></div>';
+      return '<div class="food-item">'+thumb+'<span class="name">'+escapeHtml(f.name)+'</span><span class="kcal">'+f.kcal+' kcal</span><button class="del" data-i="'+i+'">✕</button></div>';
+    }).join('');
+    foodListEl.querySelectorAll('.del').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        state.foods.splice(parseInt(btn.dataset.i,10), 1);
+        save('gr_foods_' + todayKey(), state.foods);
+        renderFoods();
+        renderRing();
+      });
+    });
+  }
+  renderFoods();
+
+  /* ---- photo capture + compression ---- */
+  var pendingPhoto = null; // compressed base64 dataURL
+  var photoPreview = document.getElementById('photoPreview');
+  var aiBtn = document.getElementById('aiEstimateBtn');
+  var aiHint = document.getElementById('aiHint');
+
+  function handlePhotoFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var maxW = 500;
+        var scale = Math.min(1, maxW / img.width);
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        pendingPhoto = canvas.toDataURL('image/jpeg', 0.6);
+        photoPreview.src = pendingPhoto;
+        photoPreview.style.display = 'block';
+        aiBtn.style.display = 'block';
+        aiBtn.disabled = false;
+        aiHint.style.display = 'block';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  document.getElementById('photoInputCamera').addEventListener('change', function(e){
+    handlePhotoFile(e.target.files[0]);
+  });
+  document.getElementById('photoInputGallery').addEventListener('change', function(e){
+    handlePhotoFile(e.target.files[0]);
+  });
+
+  aiBtn.addEventListener('click', function(){
+    if(!pendingPhoto) return;
+    aiBtn.disabled = true;
+    aiBtn.textContent = '🤖 Tahmin ediliyor…';
+    var base64Data = pendingPhoto.split(',')[1];
+
+    fetch('/api/estimate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64Data })
+    }).then(function(r){ return r.json().then(function(body){ return { ok: r.ok, body: body }; }); })
+      .then(function(res){
+        if(!res.ok){
+          toast(res.body.error || 'AI tahmini başarısız oldu. Kaloriyi elle girebilirsin.');
+          return;
+        }
+        var parsed = res.body;
+        document.getElementById('foodName').value = parsed.name || '';
+        document.getElementById('foodKcal').value = Math.round(parsed.kcal) || '';
+        toast('AI tahmini: ' + parsed.name + ' · ' + parsed.kcal + ' kcal — kontrol edip ekleyebilirsin.');
+      })
+      .catch(function(){
+        toast('Sunucuya ulaşılamadı. Kaloriyi elle girebilirsin.');
+      })
+      .finally(function(){
+        aiBtn.disabled = false;
+        aiBtn.textContent = '🤖 AI ile Tahmin Et';
+      });
+  });
+
+  document.getElementById('addFoodBtn').addEventListener('click', function(){
+    var name = document.getElementById('foodName').value.trim();
+    var kcal = parseFloat(document.getElementById('foodKcal').value);
+    if(!name || !kcal){ toast('Yemek adı ve kalori gir.'); return; }
+    state.foods.push({name:name, kcal:Math.round(kcal), photo: pendingPhoto || null});
+    save('gr_foods_' + todayKey(), state.foods);
+    document.getElementById('foodName').value = '';
+    document.getElementById('foodKcal').value = '';
+    pendingPhoto = null;
+    photoPreview.style.display = 'none';
+    aiBtn.style.display = 'none';
+    aiHint.style.display = 'none';
+    renderFoods();
+    renderRing();
+  });
+
+  var ringFill = document.getElementById('ringFill');
+  var CIRC = 2 * Math.PI * 46;
+  function renderRing(){
+    if(!state.goalKcal){ ringCard.style.display = 'none'; return; }
+    ringCard.style.display = 'block';
+    var eaten = state.foods.reduce(function(a,f){ return a + f.kcal; }, 0);
+    document.getElementById('ringEaten').textContent = eaten;
+    document.getElementById('ringGoal').textContent = state.goalKcal;
+    var pct = Math.min(eaten / state.goalKcal, 1);
+    ringFill.setAttribute('stroke-dashoffset', CIRC * (1 - pct));
+    var remaining = state.goalKcal - eaten;
+    var remEl = document.getElementById('ringRemaining');
+    if(remaining >= 0){
+      remEl.textContent = remaining + ' kcal kaldı';
+      ringFill.style.stroke = 'var(--ember)';
+    } else {
+      remEl.textContent = Math.abs(remaining) + ' kcal aşıldı';
+      ringFill.style.stroke = 'var(--danger)';
+    }
+    if(pct >= 1 && remaining >= -5 && remaining <= 5){
+      ringFill.style.stroke = 'var(--mint)';
+    }
+  }
+  if(state.goalKcal){ ringCard.style.display = 'block'; }
+  renderRing();
+
+  /* ================= EGZERSİZ ================= */
+  var programs = [
+    { title:'Aktif Toparlanma', sub:'Pazar · hafif tempo, esneme ağırlıklı',
+      ex:[
+        {n:'Boyun & omuz çevirme', m:'2 set x 10 tekrar', t:60},
+        {n:'Kedi-inek germe', m:'2 set x 12 tekrar', t:60},
+        {n:'Kalça açıcı germe', m:'2 set x 30 sn / bacak', t:60},
+        {n:'Yürüyüş (yerinde)', m:'8 dakika', t:480},
+        {n:'Derin nefes + gevşeme', m:'5 dakika', t:300},
+      ]},
+    { title:'Üst Vücut Gücü', sub:'Pazartesi · göğüs, sırt, kol',
+      ex:[
+        {n:'Şınav', m:'4 set x 12 tekrar', t:60},
+        {n:'Ters açılı şınav (sandalyede)', m:'3 set x 15 tekrar', t:60},
+        {n:'Diamond şınav', m:'3 set x 10 tekrar', t:60},
+        {n:'Plank to push-up', m:'3 set x 10 tekrar', t:60},
+        {n:'Triceps dip (sandalyede)', m:'3 set x 15 tekrar', t:60},
+      ]},
+    { title:'Alt Vücut Patlayıcı Güç', sub:'Salı · bacak, kalça, güç',
+      ex:[
+        {n:'Squat', m:'4 set x 15 tekrar', t:60},
+        {n:'Bulgar split squat', m:'3 set x 10 tekrar / bacak', t:60},
+        {n:'Sıçramalı squat', m:'3 set x 12 tekrar', t:75},
+        {n:'Kalça köprüsü', m:'3 set x 15 tekrar', t:45},
+        {n:'Duvar oturuşu', m:'3 set x 40 sn', t:45},
+      ]},
+    { title:'Core & Denge', sub:'Çarşamba · karın, bel, stabilite',
+      ex:[
+        {n:'Plank', m:'3 set x 40 sn', t:45},
+        {n:'Bisiklet crunch', m:'3 set x 20 tekrar', t:45},
+        {n:'Yan plank', m:'2 set x 30 sn / taraf', t:45},
+        {n:'Mountain climber', m:'3 set x 20 tekrar', t:45},
+        {n:'Superman kaldırış', m:'3 set x 15 tekrar', t:45},
+      ]},
+    { title:'Tam Vücut HIIT', sub:'Perşembe · yüksek tempo, yağ yakım',
+      ex:[
+        {n:'Jumping jack', m:'4 set x 30 sn', t:30},
+        {n:'Burpee', m:'4 set x 10 tekrar', t:60},
+        {n:'Squat + kol kaldırma', m:'3 set x 15 tekrar', t:45},
+        {n:'Yüksek diz koşusu (yerinde)', m:'4 set x 30 sn', t:30},
+        {n:'Plank jack', m:'3 set x 20 tekrar', t:45},
+      ]},
+    { title:'Esneklik & Mobilite', sub:'Cuma · yorgunluk atma, esneme',
+      ex:[
+        {n:'Downward dog', m:'3 set x 30 sn', t:45},
+        {n:'Kalça bükücü germe', m:'2 set x 30 sn / bacak', t:45},
+        {n:'Omurga rotasyonu', m:'2 set x 10 tekrar / taraf', t:45},
+        {n:'Hamstring germe', m:'2 set x 30 sn / bacak', t:45},
+        {n:'Çocuk pozu', m:'3 dakika', t:180},
+      ]},
+    { title:'Fonksiyonel Tam Vücut', sub:'Cumartesi · gerçek hayat hareketleri',
+      ex:[
+        {n:'Squat to press', m:'3 set x 12 tekrar', t:60},
+        {n:'Lunge yürüyüşü', m:'3 set x 10 adım / bacak', t:60},
+        {n:'Renegade row (plank çekişi)', m:'3 set x 10 tekrar', t:60},
+        {n:'Step-up (sandalyede)', m:'3 set x 12 tekrar / bacak', t:60},
+        {n:"Farmer's carry (yerinde)", m:'3 set x 30 sn', t:45},
+      ]}
+  ];
+
+  var dayPillsEl = document.getElementById('dayPills');
+  var shortDays = ['Paz','Pzt','Sal','Çar','Per','Cum','Cts'];
+  dayPillsEl.innerHTML = shortDays.map(function(d,i){
+    return '<span class="day-pill" data-i="'+i+'">'+d+'</span>';
+  }).join('');
+
+  var currentProgIndex = (state.shuffleSeed !== null) ? state.shuffleSeed : new Date().getDay();
+
+  function isTodayFullyDone(idx){
+    var prog = programs[idx];
+    for(var i=0;i<prog.ex.length;i++){
+      if(!state.checks[idx+'_'+i]) return false;
+    }
+    return true;
+  }
+
+  function markCompletionIfDone(){
+    var done = isTodayFullyDone(currentProgIndex);
+    state.completedDays[todayKey()] = done;
+    save('gr_completedDays', state.completedDays);
+    renderWeekGoal();
+  }
+
+  function renderProgram(idx){
+    currentProgIndex = idx;
+    var pills = dayPillsEl.querySelectorAll('.day-pill');
+    pills.forEach(function(p){ p.classList.remove('active'); });
+    var todayIdx = new Date().getDay();
+    pills[todayIdx] && pills[todayIdx].classList.add('active');
+
+    var prog = programs[idx];
+    document.getElementById('progTitle').textContent = prog.title;
+    document.getElementById('progSub').textContent = prog.sub + (idx === todayIdx ? '' : ' · alternatif öneri');
+
+    var exList = document.getElementById('exList');
+    exList.innerHTML = prog.ex.map(function(e, i){
+      var key = idx + '_' + i;
+      var done = !!state.checks[key];
+      return '<div class="ex-item">'+
+        '<div class="ex-check '+(done?'done':'')+'" data-key="'+key+'">'+(done?'✓':'')+'</div>'+
+        '<div class="ex-info"><div class="ex-name '+(done?'done':'')+'">'+escapeHtml(e.n)+'</div><div class="ex-meta">'+escapeHtml(e.m)+'</div></div>'+
+        '<div class="ex-timer" data-sec="'+e.t+'">'+formatTime(e.t)+'</div>'+
+      '</div>';
+    }).join('');
+
+    exList.querySelectorAll('.ex-check').forEach(function(box){
+      box.addEventListener('click', function(){
+        var key = box.dataset.key;
+        state.checks[key] = !state.checks[key];
+        save('gr_checks_' + todayKey(), state.checks);
+        renderProgram(currentProgIndex);
+        markCompletionIfDone();
+      });
+    });
+
+    exList.querySelectorAll('.ex-timer').forEach(function(timerEl){
+      timerEl.addEventListener('click', function(){ startCountdown(timerEl); });
+    });
+  }
+
+  function formatTime(sec){
+    var m = Math.floor(sec/60), s = sec%60;
+    return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+  function startCountdown(el){
+    if(el.dataset.running === '1') return;
+    el.dataset.running = '1';
+    var total = parseInt(el.dataset.sec, 10);
+    var remaining = total;
+    el.textContent = formatTime(remaining);
+    var iv = setInterval(function(){
+      remaining--;
+      if(remaining < 0){
+        clearInterval(iv);
+        el.textContent = formatTime(total);
+        el.dataset.running = '0';
+        toast('Süre doldu 💪');
+        return;
+      }
+      el.textContent = formatTime(remaining);
+    }, 1000);
+  }
+
+  renderProgram(currentProgIndex);
+
+  document.getElementById('shuffleBtn').addEventListener('click', function(){
+    var next = Math.floor(Math.random() * programs.length);
+    if(next === currentProgIndex) next = (next + 1) % programs.length;
+    state.shuffleSeed = next;
+    save('gr_shuffleSeed_' + todayKey(), next);
+    renderProgram(next);
+    toast('Yeni varyasyon: ' + programs[next].title);
+  });
+
+  document.getElementById('resetChecksBtn').addEventListener('click', function(){
+    state.checks = {};
+    save('gr_checks_' + todayKey(), state.checks);
+    renderProgram(currentProgIndex);
+    markCompletionIfDone();
+    toast('İlerleme sıfırlandı.');
+  });
+
+  /* ================= GÜNLÜK KAYIT ================= */
+  var moodRow = document.getElementById('moodRow');
+  var journalText = document.getElementById('journalText');
+  var saveJournalBtn = document.getElementById('saveJournalBtn');
+  var journalStatus = document.getElementById('journalStatus');
+  var journalHistoryEl = document.getElementById('journalHistory');
+  var selectedMood = null;
+  var editingKey = null; // if editing a past entry, holds its storage key
+
+  function journalKey(dateStr){ return 'gr_journal_' + dateStr; }
+
+  function setMood(m){
+    selectedMood = m;
+    moodRow.querySelectorAll('.mood-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.mood === m);
+    });
+  }
+  moodRow.querySelectorAll('.mood-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setMood(btn.dataset.mood); });
+  });
+
+  function loadTodayIntoForm(){
+    editingKey = null;
+    var existing = load(journalKey(todayKey()), null);
+    if(existing){
+      journalText.value = existing.text || '';
+      setMood(existing.mood || '🙂');
+      saveJournalBtn.textContent = 'Bugünkü Kaydı Güncelle';
+      journalStatus.style.display = 'block';
+      journalStatus.innerHTML = '<b>Son kayıt:</b> ' + new Date(existing.ts).toLocaleString('tr-TR');
+    } else {
+      journalText.value = '';
+      setMood('🙂');
+      saveJournalBtn.textContent = 'Kaydet';
+      journalStatus.style.display = 'none';
+    }
+  }
+
+  saveJournalBtn.addEventListener('click', function(){
+    var text = journalText.value.trim();
+    if(!text){ toast('Bir şeyler yaz.'); return; }
+    var key = editingKey || journalKey(todayKey());
+    save(key, { text: text, mood: selectedMood || '🙂', ts: Date.now() });
+    toast('Kaydedildi.');
+    renderJournalHistory();
+    if(!editingKey){
+      journalStatus.style.display = 'block';
+      journalStatus.innerHTML = '<b>Son kayıt:</b> ' + new Date().toLocaleString('tr-TR');
+      saveJournalBtn.textContent = 'Bugünkü Kaydı Güncelle';
+    } else {
+      loadTodayIntoForm();
+    }
+  });
+
+  function allJournalKeys(){
+    var keys = [];
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k = localStorage.key(i);
+        if(k && k.indexOf('gr_journal_') === 0) keys.push(k);
+      }
+    }catch(e){}
+    return keys;
+  }
+
+  function renderJournalHistory(){
+    var keys = allJournalKeys();
+    if(keys.length === 0){
+      journalHistoryEl.innerHTML = '<div class="empty">Henüz kaydın yok.</div>';
+      return;
+    }
+    var entries = keys.map(function(k){
+      var v = load(k, null);
+      return v ? {key:k, mood:v.mood, text:v.text, ts:v.ts} : null;
+    }).filter(Boolean);
+    entries.sort(function(a,b){ return b.ts - a.ts; });
+
+    journalHistoryEl.innerHTML = entries.map(function(e){
+      var d = new Date(e.ts);
+      var dateLabel = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+      return '<div class="journal-entry" data-key="'+e.key+'">'+
+        '<div class="je-top"><span class="je-date">'+dateLabel+'</span><span class="je-mood">'+e.mood+'</span></div>'+
+        '<div class="je-text">'+escapeHtml(e.text)+'</div>'+
+        '<div class="je-actions"><button class="edit">Düzenle</button><button class="del">Sil</button></div>'+
+      '</div>';
+    }).join('');
+
+    journalHistoryEl.querySelectorAll('.edit').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var wrap = btn.closest('.journal-entry');
+        var key = wrap.dataset.key;
+        var v = load(key, null);
+        if(!v) return;
+        editingKey = key;
+        journalText.value = v.text;
+        setMood(v.mood);
+        saveJournalBtn.textContent = 'Bu Kaydı Güncelle';
+        journalStatus.style.display = 'block';
+        journalStatus.innerHTML = '<b>Düzenleniyor:</b> ' + new Date(v.ts).toLocaleString('tr-TR');
+        journalText.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+    journalHistoryEl.querySelectorAll('.del').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var wrap = btn.closest('.journal-entry');
+        var key = wrap.dataset.key;
+        try{ localStorage.removeItem(key); }catch(e){}
+        if(editingKey === key) loadTodayIntoForm();
+        renderJournalHistory();
+        toast('Kayıt silindi.');
+      });
+    });
+  }
+
+  loadTodayIntoForm();
+  renderJournalHistory();
+
+  /* weekly exercise goal */
+  var weekRowEl = document.getElementById('weekRow');
+  var weeklyGoalInput = document.getElementById('weeklyGoalInput');
+  weeklyGoalInput.value = state.weeklyGoal;
+  var weekFillEl = document.getElementById('weekFill');
+  var weekProgressText = document.getElementById('weekProgressText');
+  var weekShort = ['Pzt','Sal','Çar','Per','Cum','Cts','Paz'];
+
+  function getMonday(d){
+    var day = d.getDay();
+    var diff = (day === 0 ? -6 : 1) - day;
+    var monday = new Date(d);
+    monday.setDate(d.getDate() + diff);
+    monday.setHours(0,0,0,0);
+    return monday;
+  }
+
+  function renderWeekGoal(){
+    var monday = getMonday(new Date());
+    var todayStr = todayKey();
+    var completedCount = 0;
+    var html = '';
+    for(var i=0;i<7;i++){
+      var d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      var key = dateKeyFor(d);
+      var done = !!state.completedDays[key];
+      var isToday = key === todayStr;
+      if(done) completedCount++;
+      html += '<div class="d"><div class="box '+(done?'done':'')+' '+(isToday?'today':'')+'">'+(done?'✓':d.getDate())+'</div>'+weekShort[i]+'</div>';
+    }
+    weekRowEl.innerHTML = html;
+    var pct = Math.min(completedCount / state.weeklyGoal, 1) * 100;
+    weekFillEl.style.width = pct + '%';
+    weekProgressText.textContent = completedCount + ' / ' + state.weeklyGoal + ' gün tamamlandı';
+  }
+  renderWeekGoal();
+  markCompletionIfDone();
+
+  weeklyGoalInput.addEventListener('change', function(){
+    var v = parseInt(weeklyGoalInput.value, 10) || 4;
+    state.weeklyGoal = v;
+    save('gr_weeklyGoal', v);
+    renderWeekGoal();
+  });
+
+  /* weight goal */
+  var currentWeightInput = document.getElementById('currentWeightInput');
+  var targetWeightInput = document.getElementById('targetWeightInput');
+  var weightFillEl = document.getElementById('weightFill');
+  var weightGoalText = document.getElementById('weightGoalText');
+
+  if(state.weightGoal){
+    currentWeightInput.value = state.weightGoal.current;
+    targetWeightInput.value = state.weightGoal.target;
+  } else if(state.profile){
+    currentWeightInput.value = state.profile.weight;
+  }
+
+  function renderWeightGoal(){
+    if(!state.weightGoal){ weightGoalText.innerHTML = '<span>Hedefe kalan</span><b>—</b>'; weightFillEl.style.width='0%'; return; }
+    var cur = state.weightGoal.current, tgt = state.weightGoal.target, start = state.weightGoal.start;
+    var totalDelta = Math.abs(start - tgt) || 1;
+    var doneDelta = Math.abs(start - cur);
+    var pct = Math.min(doneDelta / totalDelta, 1) * 100;
+    weightFillEl.style.width = pct + '%';
+    var remaining = Math.abs(cur - tgt);
+    weightGoalText.innerHTML = '<span>Hedefe kalan</span><b>' + remaining.toFixed(1) + ' kg</b>';
+  }
+  renderWeightGoal();
+
+  document.getElementById('saveWeightGoalBtn').addEventListener('click', function(){
+    var cur = parseFloat(currentWeightInput.value);
+    var tgt = parseFloat(targetWeightInput.value);
+    if(!cur || !tgt){ toast('Kilo değerlerini gir.'); return; }
+    if(!state.weightGoal){
+      state.weightGoal = {start:cur, current:cur, target:tgt};
+    } else {
+      state.weightGoal.current = cur;
+      state.weightGoal.target = tgt;
+    }
+    save('gr_weightGoal', state.weightGoal);
+    renderWeightGoal();
+    toast('Kilo hedefi güncellendi.');
+  });
+
+})();
+</script>
+</body>
+</html>
